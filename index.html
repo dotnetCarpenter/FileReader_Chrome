@@ -8,40 +8,54 @@
 </head>
 <body>
   <form>
-    <button id="doIt">Read PDF</button>
+    <button id="FileReader">Save PDF for iOS + every other browser</button>
+    <button id="createObjectURL">Save PDF for Chrome</button>
   </form>
   <script>
     'use strict'
 
-    document.getElementById('doIt').onclick = run
+    document.getElementById('FileReader').onclick = run('FileReader')
+    document.getElementById('createObjectURL').onclick = run('createObjectURL')
 
-    function run (event) {
-      event.preventDefault()
+    function run (type) {
+      return event => {
+        event.preventDefault()
 
-      fetch('http://localhost:8000/Getting started with Napp.pdf', {
-        method: 'get',
-      })
-      .then(response => response.blob())
-      .then(blob => {
-        const fileName = 'example.pdf'
-        const reader = new FileReader()
+        fetch('http://localhost:9000/example.pdf', {
+          method: 'get',
+        })
+        .then(response => response.blob())
+        .then(blob => {
+          const fileName = 'example.pdf'
+          const reader = new FileReader()
 
-        reader.onloadend = () => {
-          const objectUrl = window.URL.createObjectURL(blob)
-          const a = document.createElement("a")
-          a.href = objectUrl
-          // a.href = reader.result
-          a.style.display = 'none'
-          a.download = fileName
+          reader.onloadend = () => {
+            const a = document.createElement("a")
+            let objectUrl
 
-          document.body.appendChild(a)
-          a.click()
-          window.URL.revokeObjectURL(objectUrl)
+            if (type === 'createObjectURL') {
+              objectUrl = window.URL.createObjectURL(blob)
+              a.href = objectUrl
+            } else {
+              a.href = reader.result
+            }
 
-        }
+            a.style.display = 'none'
+            a.download = fileName
 
-        reader.readAsDataURL(blob)
-      })
+            document.body.appendChild(a)
+            a.click()
+
+            if (type === 'createObjectURL') {
+              window.URL.revokeObjectURL(objectUrl)
+            } else {
+            }
+            a.parentNode.removeChild(a)
+          }
+
+          reader.readAsDataURL(blob)
+        })
+      }
     }
   </script>
 </body>

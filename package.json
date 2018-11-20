@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "ecstatic",
+    "start": "ecstatic --port 9000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
