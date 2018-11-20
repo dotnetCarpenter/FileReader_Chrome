@@ -24,22 +24,27 @@
       .then(response => response.blob())
       .then(blob => {
         const fileName = 'example.pdf'
-        const reader = new FileReader()
 
-        reader.onloadend = () => {
-          const a = document.createElement("a")
+        if (navigator.msSaveBlob) { // IE11 and most Edge versions
+          navigator.msSaveBlob(blob, fileName)
+        } else { // every other browser
+          const reader = new FileReader()
 
-          a.href = reader.result
-          a.style.display = 'none'
-          a.download = fileName
+          reader.onloadend = () => {
+            const a = document.createElement("a")
 
-          document.body.appendChild(a)
-          a.click()
+            a.href = reader.result
+            a.style.display = 'none'
+            a.download = fileName
 
-          a.parentNode.removeChild(a)
+            document.body.appendChild(a)
+            a.click()
+
+            a.parentNode.removeChild(a)
+          }
+
+          reader.readAsDataURL(blob)
         }
-
-        reader.readAsDataURL(blob)
       })
     }
   </script>
