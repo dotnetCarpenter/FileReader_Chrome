@@ -1,0 +1,16 @@
+{
+  "name": "FileReader_Chrome",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "ecstatic",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ecstatic": "^3.3.0"
+  }
+}

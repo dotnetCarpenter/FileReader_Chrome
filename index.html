@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chrome FileReader Network Error</title>
+</head>
+<body>
+  <form>
+    <button id="doIt">Read PDF</button>
+  </form>
+  <script>
+    'use strict'
+
+    document.getElementById('doIt').onclick = run
+
+    function run (event) {
+      event.preventDefault()
+
+      fetch('http://localhost:8000/Getting started with Napp.pdf', {
+        method: 'get',
+      })
+      .then(response => response.blob())
+      .then(blob => {
+        const fileName = 'example.pdf'
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+          const objectUrl = window.URL.createObjectURL(blob)
+          const a = document.createElement("a")
+          a.href = objectUrl
+          // a.href = reader.result
+          a.style.display = 'none'
+          a.download = fileName
+
+          document.body.appendChild(a)
+          a.click()
+          window.URL.revokeObjectURL(objectUrl)
+
+        }
+
+        reader.readAsDataURL(blob)
+      })
+    }
+  </script>
+</body>
+</html>
