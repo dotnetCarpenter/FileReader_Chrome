@@ -18,7 +18,7 @@
     function run (event) {
       event.preventDefault()
 
-      fetch('http://localhost:9000/example.pdf', {
+      fetch('example.pdf', {
         method: 'get',
       })
       .then(response => response.blob())

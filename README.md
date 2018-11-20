@@ -6,3 +6,9 @@ downloading...
 
 
 https://dotnetcarpenter.github.io/FileReader_Chrome/
+
+## To run locally
+
+1. `npm i`
+2. `npm start`
+3. open web browser at `localhost:9000`
