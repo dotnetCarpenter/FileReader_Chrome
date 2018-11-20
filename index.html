@@ -25,7 +25,7 @@
       .then(blob => {
         const fileName = 'example.pdf'
 
-        if (navigator.msSaveBlob) { // IE11 and most Edge versions
+        if (navigator.msSaveBlob) { // IE11 and Edge 17-
           navigator.msSaveBlob(blob, fileName)
         } else { // every other browser
           const reader = new FileReader()
