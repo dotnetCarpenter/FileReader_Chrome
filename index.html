@@ -39,9 +39,9 @@
         } else { // every other browser
           const reader = new FileReader()
           reader.onloadend = () => {
-            download(reader.result, fileName)
+            download('application/pdf;base64,' + utoa(reader.result), fileName)
           }
-          reader.readAsDataURL(blob)
+          reader.readAsText(blob, 'utf8')
         }
       })
     }
@@ -56,6 +56,11 @@
       a.click()
 
       a.parentNode.removeChild(a)
+    }
+
+    // ucs-2 string to base64 encoded ascii
+    function utoa (str) {
+      return window.btoa(unescape(encodeURIComponent(str)))
     }
   </script>
 </body>
