@@ -8,15 +8,6 @@
 </head>
 <body>
   <form>
-    <label>utf8.pdf
-      <input type="radio" name="fileName" value="utf8.pdf" checked>
-    </label>
-    <label>example.pdf
-      <input type="radio" name="fileName" value="example.pdf">
-    </label>
-
-    <hr>
-
     <button id="FileReader">Save PDF for iOS + every other browser</button>
   </form>
   <script>
@@ -26,24 +17,31 @@
 
     function run (event) {
       event.preventDefault()
-      const fileName = document.querySelector('input:checked').value
-      console.log(fileName)
-      return
+      // const fileName = 'example.pdf'
+      const fileName = 'utf8.pdf'
 
       fetch(fileName, {
         method: 'get',
       })
       .then(response => response.blob())
+      // .then(response => response.text())
+      // .then(text => new Blob([text], {encoding:"UTF-8",type:"application/pdf;charset=UTF-8"}))
       .then(blob => {
 
         if (navigator.msSaveBlob) { // IE11 and Edge 17-
           navigator.msSaveBlob(blob, fileName)
         } else { // every other browser
+          // download('data:application/pdf; charset=utf-8;base64,' + blob/* utoa(blob) */, fileName)
+          // download(URL.createObjectURL(blob), fileName)
           const reader = new FileReader()
           reader.onloadend = () => {
-            download(reader.result, fileName)
+            // download('data:application/pdf;base64,' + utoa(reader.result), fileName)
+            let result = reader.result
+            download(result.replace(/application\/pdf;/, 'application/pdf; charset=utf-8;'), fileName)
           }
+          // blob.type = 'application/pdf;charset=utf-8'
           reader.readAsDataURL(blob)
+          // reader.readAsText(blob)
         }
       })
     }
@@ -58,6 +56,16 @@
       a.click()
 
       a.parentNode.removeChild(a)
+    }
+
+    // ucs-2 string to base64 encoded ascii
+    function utoa (str) {
+      return window.btoa(unescape(encodeURIComponent(str)))
+    }
+
+    // base64 encoded ascii to ucs-2 string
+    function atou (str) {
+      return decodeURIComponent(escape(window.atob(str)))
     }
   </script>
 </body>
