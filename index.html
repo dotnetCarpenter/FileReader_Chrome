@@ -17,7 +17,7 @@
 
     <hr>
 
-    <button id="FileReader">Save PDF for iOS + every other browser</button>
+    <button id="FileReader">Save PDF</button>
   </form>
   <script>
     'use strict'
@@ -27,8 +27,6 @@
     function run (event) {
       event.preventDefault()
       const fileName = document.querySelector('input:checked').value
-      console.log(fileName)
-      return
 
       fetch(fileName, {
         method: 'get',

@@ -17,3 +17,44 @@ https://dotnetcarpenter.github.io/FileReader_Chrome/
 1. `npm i`
 2. `npm start`
 3. open web browser at `localhost:9000`
+
+
+# Chrome bug report
+
+## FileReader readAsDataURL can not base64 encode utf-8 characters in a PDF file
+
+https://bugs.chromium.org/p/chromium/issues/detail?id=925096
+
+**Steps to reproduce the problem:**
+
+1. Download all attached files
+2. Run index.html in a local web server
+3. Make sure that "utf8.pdf" is checked
+4. Click on "Save PDF" button
+
+**Does this feature work correctly in other browsers?**
+
+Yes - This is just a Chromium problem
+
+**What is the expected behavior?**
+
+Chrome should download a valid PDF file.
+
+**What went wrong?**
+
+Chrome reports: "Failed - Network error". That is however not true.
+
+TLDR; Chrome can not base64 encode a file that is not in ASCII
+
+I am using the FileReader readAsDataURL method to base64 encode the PDF file and add that to a hidden link element. This works with example.pdf which appears to be in ASCII. But utf8.pdf which is written in Norwegian fails with "Failed - Network error".
+
+No errors are thrown.
+
+I have also tried to create the blob myself with `new Blob([text], {encoding:"UTF-8",type:"application/pdf;charset=UTF-8"})` where `text` is the return value of text method of the Response interface of the Fetch API. This result in a file download but the PDF file is corrupted.
+
+**Any other comments?**
+
+In Firefox, the base64 text starts with `data:application/pdf; charset=utf-8;base64,` and result in a valid PDF file download.
+But in Chrome the base64 text starts with `data:application/pdf;base64,` and fails.
+
+The reduced test case can also be found at https://github.com/dotnetCarpenter/FileReader_Chrome
