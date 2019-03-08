@@ -7,8 +7,7 @@ Turns out it was working with just FileReader all along.
 
 1. Chrome has a hard limit of 25MB, if the PDF is larger than that, then the download is aborted.
 2. Chrome also has an issue with UTF8 encoded PDF. Chrome can only convert ASCII encoding via the FileReader API, to base64 encoding. Firefox does the _right_ thing. IE11 and Edge uses a Microsoft API, that can handle UTF8.
-3. iOS Safari (**not** desktop Safari) does not support the `download` attribute on a link, so you can not give the PDF a file name in iOS Safari.
-
+3. iOS Safari (**not** desktop Safari) does not support the `download` attribute on a link, so you can not give the PDF a file name in iOS Safari. https://bugs.webkit.org/show_bug.cgi?id=167341
 
 https://dotnetcarpenter.github.io/FileReader_Chrome/
 
