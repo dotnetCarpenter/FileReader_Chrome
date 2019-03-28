@@ -1,15 +1,17 @@
 
-~~FileReader can be used to save PDF file to desk but Chrome needs `a.href = window.URL.createObjectURL(blob)` while iOS needs `a.href = reader.result`.~~
+FileReader can be used to save PDF file to desk but Chrome needs `a.href = window.URL.createObjectURL(blob)` while iOS needs `a.href = reader.result`.
 
-Turns out it was working with just FileReader all along.
+However, if the PDF only has ASCII characters then you can use
+`reader.result` where `reader` = `new FileReader()`.
 
 ## Known issues
 
 1. Chrome has a hard limit of 25MB, if the PDF is larger than that, then the download is aborted.
 2. Chrome also has an issue with UTF8 encoded PDF. Chrome can only convert ASCII encoding via the FileReader API, to base64 encoding. Firefox does the _right_ thing. IE11 and Edge uses a Microsoft API, that can handle UTF8.
-3. iOS Safari (**not** desktop Safari) does not support the `download` attribute on a link, so you can not give the PDF a file name in iOS Safari. https://bugs.webkit.org/show_bug.cgi?id=167341
+3. iOS Safari (**not** desktop Safari) does not support the `download` attribute on a link, so you can not give the PDF a file name in iOS Safari. https://bugs.webkit.org/show_bug.cgi?id=167341 (fixed but not released).
 
-https://dotnetcarpenter.github.io/FileReader_Chrome/
++ https://dotnetcarpenter.github.io/FileReader_Chrome/
++ https://dotnetcarpenter.github.io/FileReader_Chrome/createObjectURL.html
 
 ## To run locally
 
@@ -17,6 +19,10 @@ https://dotnetcarpenter.github.io/FileReader_Chrome/
 2. `npm start`
 3. open web browser at `localhost:9000`
 
+## Output of reader.readAsDataURL(blob)
+
++ utf8.pdf Firefox: [firefox.base64](firefox.base64)
++ utf8.pdf Chrome: [chrome.base64](chrome.base64)
 
 # Chrome bug report
 

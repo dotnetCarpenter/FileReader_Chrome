@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chrome FileReader Network Error</title>
+</head>
+<body>
+  <form>
+    <label>utf8.pdf
+      <input type="radio" name="fileName" value="utf8.pdf" checked>
+    </label>
+    <label>example.pdf
+      <input type="radio" name="fileName" value="example.pdf">
+    </label>
+
+    <hr>
+    <button id="FileReader">Save PDF for Safari iOS + Firefox</button>
+    <button id="createObjectURL">Save PDF for Chrome + Firefox</button>
+  </form>
+  <script>
+    'use strict'
+
+    document.getElementById('FileReader').onclick = download('FileReader')
+    document.getElementById('createObjectURL').onclick = download('createObjectURL')
+
+    function download (type) {
+      return event => {
+        event.preventDefault()
+
+        const fileName = document.querySelector('input:checked').value
+
+
+        fetch(fileName, {
+          method: 'get',
+        })
+        .then(response => response.blob())
+        .then(blob => {
+          const reader = new FileReader()
+
+          reader.onloadend = () => {
+            const a = document.createElement("a")
+            let objectUrl
+
+            if (type === 'createObjectURL') {
+              objectUrl = window.URL.createObjectURL(blob)
+              a.href = objectUrl
+            } else {
+              a.href = reader.result
+            }
+
+            a.style.display = 'none'
+            a.download = fileName
+
+            document.body.appendChild(a)
+            a.click()
+
+            if (type === 'createObjectURL') {
+              window.URL.revokeObjectURL(objectUrl)
+            } else {
+            }
+            a.parentNode.removeChild(a)
+          }
+
+          reader.readAsDataURL(blob)
+        })
+      }
+    }
+  </script>
+</body>
+</html>
