@@ -17,40 +17,67 @@
 
     <hr>
 
-    <button id="FileReader">Save PDF</button>
+    <button id="readAsDataURL">Save PDF - readAsDataURL (Safari iOS + Firefox)</button>
+    <button id="createObjectURL">Save PDF - createObjectURL (Chrome + Firefox)</button>
+    <button id="readAsText">Save PDF - readAsText (None)</button>
   </form>
   <script>
     'use strict'
 
-    document.getElementById('FileReader').onclick = run
+    document.getElementById('readAsDataURL').onclick = run('readAsDataURL')
+    document.getElementById('createObjectURL').onclick = run('createObjectURL')
+    document.getElementById('readAsText').onclick = run('readAsText')
 
-    function run (event) {
-      event.preventDefault()
-      const fileName = document.querySelector('input:checked').value
+    function run (type) {
+      return event => {
+        event.preventDefault()
+        const fileName = document.querySelector('input:checked').value
 
-      fetch(fileName, {
-        method: 'get',
-      })
-      .then(response => response.blob())
-      .then(blob => {
+        fetch(fileName, {
+          method: 'get',
+        })
+        .then(response => response.blob())
+        .then(blob => {
 
-        if (navigator.msSaveBlob) { // IE11 and Edge 17-
-          navigator.msSaveBlob(blob, fileName)
-        } else { // every other browser
-          const reader = new FileReader()
-          reader.onloadend = () => {
-            download(reader.result, fileName)
+          if (navigator.msSaveBlob) { // IE11 and Edge 17-
+            navigator.msSaveBlob(blob, fileName)
+          } else { // every other browser
+            const reader = new FileReader()
+            reader.onloadend = () => {
+              let url
+
+              switch (type) {
+                case 'createObjectURL':
+                  url = window.URL.createObjectURL(blob)
+                  break
+                case 'readAsDataURL':
+                default:
+                  url = reader.result;
+              }
+
+              download(url, fileName)
+
+              if (type === 'createObjectURL') {
+                window.URL.revokeObjectURL(url)
+              }
+            }
+
+            if (type === 'readAsText') {
+              reader.readAsText(blob)
+            } else {
+              reader.readAsDataURL(blob)
+            }
           }
-          reader.readAsDataURL(blob)
-        }
-      })
+        })
+      }
     }
 
-    function download (base64, fileName) {
+    function download (file, fileName) {
       const a = document.createElement("a")
-      a.href = base64
+      a.href = file
       a.style.display = 'none'
       a.download = fileName
+      a.setAttribute('download', 'download')
 
       document.body.appendChild(a)
 
