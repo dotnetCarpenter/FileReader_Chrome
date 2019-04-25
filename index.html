@@ -18,7 +18,7 @@
     .support__success {
       background-color: green;
     }
-    .support__fail {
+    .support__fail, #error {
       background-color: red;
     }
   </style>
@@ -71,14 +71,14 @@
           success = URL && URL.createObjectURL
           break
         case 'readAsDataURL':
-          const reader = new FileReader
+          var reader = new FileReader
           success = reader.readAsDataURL
           break
         case 'msSaveBlob':
           success = navigator.msSaveBlob
           break
         case 'download':
-          const a = document.createElement("a")
+          var a = document.createElement("a")
           a.download = 'foo'
           success = a.hasAttribute('download')
           break
@@ -94,11 +94,11 @@
   <script>
     'use strict'
 
-    const form = document.querySelector('.download')
+    var form = document.querySelector('.download')
 
-    const submitHandler = partial(handler, downloadFile, form)
+    var submitHandler = partial(handler, downloadFile, form)
 
-    const getBlob = partial(dot, 'data')
+    var getBlob = partial(dot, 'data')
 
     form.addEventListener('submit', submitHandler)
 
@@ -111,32 +111,32 @@
       axios.get(filePath, { responseType: 'blob' })
         .then(getBlob)
         .then(function (blob) {
-          const fileName = basename(filePath)
+          var fileName = basename(filePath)
 
-          const msSaveBlobOr = partial(
+          var msSaveBlobOr = partial(
             iif,
             function () { return navigator.msSaveBlob },
             function (blob) { navigator.msSaveBlob(blob, fileName) }) // IE11 and Edge 12-18
 
-          const saveObjectUrlOrDataUrl = iif(
+          var saveObjectUrlOrDataUrl = iif(
             function () { return URL && URL.createObjectURL },
             function (readerBlob) { // Chrome and Firefox
-              const blob = readerBlob.blob
-              const url = URL.createObjectURL(blob)
+              var blob = readerBlob.blob
+              var url = URL.createObjectURL(blob)
 
               saveFile(url, fileName)
               URL.revokeObjectURL(url)
             },
             function (readerBlob) {
-              const reader = readerBlob.reader
-              const url = reader.result
+              var reader = readerBlob.reader
+              var url = reader.result
 
               saveFile(url, fileName)
             }
           )
 
-          const save = msSaveBlobOr(function (blob) {
-            const reader = new FileReader
+          var save = msSaveBlobOr(function (blob) {
+            var reader = new FileReader
             reader.onloadend = saveObjectUrlOrDataUrl({
               reader: reader,
               blob: blob,
@@ -150,7 +150,7 @@
     }
 
     function saveFile (file, fileName) {
-      const a = document.createElement("a")
+      var a = document.createElement("a")
       a.href = file
       a.style.display = 'none'
       a.setAttribute('download', 'fileName')
@@ -164,8 +164,8 @@
     }
 
     function partial (f) {
-      const xs = Array.prototype.slice.call(arguments, 1)
-      const x = xs.shift()
+      var xs = Array.prototype.slice.call(arguments, 1)
+      var x = xs.shift()
       return x == null
         ? f
         : partial.apply(null, [f.bind(null, x)].concat(xs))
@@ -182,7 +182,7 @@
     }
 
     function basename (path) {
-      const match = path.match(/\/?([^\/]+)$/)
+      var match = path.match(/\/?([^\/]+)$/)
       return match ? match[1] : ''
     }
 
@@ -190,7 +190,7 @@
 if (navigator.msSaveBlob) { // IE11 and Edge 17-
   navigator.msSaveBlob(blob, fileName)
 } else { // every other browser
-  const reader = new FileReader()
+  var reader = new FileReader()
   reader.onloadend = () => {
     let url
 
