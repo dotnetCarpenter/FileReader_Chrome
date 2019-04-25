@@ -68,6 +68,7 @@
 
       switch (testName) {
         case 'createObjectURL':
+          var userAgent = navigator.userAgent
           success = URL && URL.createObjectURL
             && userAgent.indexOf('Chrom') === -1 && userAgent.indexOf('Safari') !== -1
           break
