@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "ecstatic": "^3.3.0"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
   }
 }
