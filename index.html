@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Cross-browser File Download</title>
+  <style>
+    section {
+      margin-top: 1em;
+    }
+
+    .support {
+      display: inline-block;
+      height: 1em;
+      width: 1em;
+    }
+    .support__success {
+      background-color: green;
+    }
+    .support__fail {
+      background-color: red;
+    }
+  </style>
 </head>
 <body>
   <h1>Cross-browser File Download</h1>
@@ -20,6 +37,49 @@
 
     <input type="submit" class="download--button" value="Save PDF">
   </form>
+
+  <section>
+    Your browser support:
+    <ol>
+      <li>navigator.msSaveBlob: <span class="support" data-test-name="msSaveBlob"></span></li>
+      <li>URL.createObjectURL: <span class="support" data-test-name="createObjectURL"></span></li>
+      <li>FileReader::readAsDataURL: <span class="support" data-test-name="readAsDataURL"></span></li>
+      <li>a:download: <span class="support" data-test-name="download"></span></li>
+    </ol>
+  </section>
+
+  <script>
+    document
+      .querySelectorAll('.support')
+      .forEach(function (element) {
+        test(element, element.dataset.testName)
+      })
+
+    function test (element, testName) {
+      let success = false
+
+      switch (testName) {
+        case 'createObjectURL':
+          success = URL && URL.createObjectURL
+          break
+        case 'readAsDataURL':
+          const reader = new FileReader
+          success = reader.readAsDataURL
+          break
+        case 'msSaveBlob':
+          success = navigator.msSaveBlob
+          break
+        case 'download':
+          const a = document.createElement("a")
+          a.download = 'foo'
+          success = a.hasAttribute('download')
+          break
+      }
+
+      if (success) element.classList.add('support__success')
+      else element.classList.add('support__fail')
+    }
+  </script>
 
   <script src="https://unpkg.com/promise-polyfill"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
