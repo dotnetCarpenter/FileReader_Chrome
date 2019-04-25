@@ -70,7 +70,7 @@
         case 'createObjectURL':
           var userAgent = navigator.userAgent
           success = URL && URL.createObjectURL
-            && userAgent.indexOf('Chrom') === -1 && userAgent.indexOf('Safari') !== -1
+            && userAgent.indexOf('Chrom') !== -1 && userAgent.indexOf('Safari') !== -1
           break
         case 'readAsDataURL':
           var reader = new FileReader
@@ -124,7 +124,7 @@
             function () {
               var userAgent = navigator.userAgent
               return URL && URL.createObjectURL
-                && userAgent.indexOf('Chrom') === -1 && userAgent.indexOf('Safari') !== -1
+                && userAgent.indexOf('Chrom') !== -1 && userAgent.indexOf('Safari') !== -1
             },
             function (readerBlob) { // Chrome and Firefox
               var blob = readerBlob.blob
