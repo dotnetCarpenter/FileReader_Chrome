@@ -57,9 +57,9 @@
   </section>
 
   <script>
-    document
-      .querySelectorAll('.support')
-      .forEach(function (element) {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('.support'),
+      function (element) {
         test(element, element.dataset.testName)
       })
 
