@@ -24,6 +24,14 @@
   </style>
 </head>
 <body>
+  <section>
+    <p id="error"></p>
+  </section>
+  <script>
+    window.addEventListener('error', function (error) {
+      document.getElementById('error').textContent = error.message
+    })
+  </script>
   <h1>Cross-browser File Download</h1>
   <form class="download">
     <label>lyreco.3.9MB.pdf
@@ -49,8 +57,6 @@
   </section>
 
   <script>
-    window.addEventListener('error', alert)
-
     document
       .querySelectorAll('.support')
       .forEach(function (element) {
