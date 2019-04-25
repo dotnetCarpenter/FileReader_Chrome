@@ -68,7 +68,8 @@
 
       switch (testName) {
         case 'createObjectURL':
-          success = URL && URL.createObjectURL && navigator.userAgent.indexOf('Safari') === -1
+          success = URL && URL.createObjectURL
+            && userAgent.indexOf('Chrom') === -1 && userAgent.indexOf('Safari') !== -1
           break
         case 'readAsDataURL':
           var reader = new FileReader
@@ -119,7 +120,11 @@
             function (blob) { navigator.msSaveBlob(blob, fileName) }) // IE11 and Edge 12-18
 
           var saveObjectUrlOrDataUrl = iif(
-            function () { return URL && URL.createObjectURL && navigator.userAgent.indexOf('Safari') === -1 },
+            function () {
+              const userAgent = navigator.userAgent
+              return URL && URL.createObjectURL
+                && userAgent.indexOf('Chrom') === -1 && userAgent.indexOf('Safari') !== -1
+            },
             function (readerBlob) { // Chrome and Firefox
               var blob = readerBlob.blob
               var url = URL.createObjectURL(blob)
