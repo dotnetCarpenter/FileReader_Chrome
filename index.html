@@ -64,7 +64,7 @@
       })
 
     function test (element, testName) {
-      let success = false
+      var success = false
 
       switch (testName) {
         case 'createObjectURL':
@@ -192,7 +192,7 @@ if (navigator.msSaveBlob) { // IE11 and Edge 17-
 } else { // every other browser
   var reader = new FileReader()
   reader.onloadend = () => {
-    let url
+    var url
 
     switch (type) {
       case 'createObjectURL':
