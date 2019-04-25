@@ -29,7 +29,7 @@
   </section>
   <script>
     window.addEventListener('error', function (error) {
-      document.getElementById('error').textContent = error.message
+      document.getElementById('error').textContent = (error.lineno || error.lineNumber) + ' ' + error.message
     })
   </script>
   <h1>Cross-browser File Download</h1>
