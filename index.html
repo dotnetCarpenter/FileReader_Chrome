@@ -133,11 +133,11 @@
               saveFile(url, fileName)
               URL.revokeObjectURL(url)
             },
-            function (readerBlob) {
+            function (readerBlob) { // Safari
               var reader = readerBlob.reader
               var url = reader.result
 
-              saveFile(url, fileName)
+              saveFile('ibooks://' + url, fileName)
             }
           )
 
@@ -156,6 +156,7 @@
     }
 
     function saveFile (file, fileName) {
+      console.log(file)
       var a = document.createElement("a")
       a.href = file
       a.style.display = 'none'
