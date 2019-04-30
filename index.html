@@ -44,6 +44,7 @@
     <hr>
 
     <input type="submit" class="download--button" value="Save PDF">
+    <a href="ibooks://example.48K.pdf">iBooks</a>
   </form>
 
   <section>
@@ -137,7 +138,7 @@
               var reader = readerBlob.reader
               var url = reader.result
 
-              saveFile('ibooks://' + url, fileName)
+              saveFile(url, fileName)
             }
           )
 
